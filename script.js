@@ -7,6 +7,17 @@
 function arrayDiff(arr1, arr2) {
     // TODO
     const newArr = [];
+
+	arr1.forEach((item) => {
+      if(!arr2.includes(item))
+        newArr.push(item);
+	});
+  
+    arr2.forEach((item) => {
+      if(!arr1.includes(item))
+        newArr.push(item);
+	});
+  
     return newArr;
 }
 
@@ -25,8 +36,12 @@ document.getElementById('exercice1').value = ex1.toString();
 //
 // Exemple : replaceText("He is Sleeping on the couch", "Sleeping", "sitting") devrait retourner "He is Sitting on the couch".
 function replaceText(str, before, after) {
-    // TODO
-    return str;
+    
+    const replaced = str.replace(before, function() {
+        return before[0] === before[0].toUpperCase() ? after[0].toUpperCase() + after.slice(1) : after.toLowerCase();
+    });
+
+    return replaced;
 }
 
 const ex2 = replaceText('Let us go to the store', 'store', 'mall');
@@ -39,9 +54,17 @@ document.getElementById('exercice2').value = ex2.toString();
 // Vérifiez les tests d'assertion pour des exemples.
 
 // Exemple : mergeSet([1, 2, 3], [5, 2, 1]) should return [1, 2, 3, 5].
-function mergeSet(arr) {
-    // TODO
-    return arr;
+function mergeSet(...arr) {
+    const mergedSet = new Set();
+
+    arr.forEach(array => {
+        array.forEach(item => {
+            mergedSet.add(item);
+        });
+    });
+
+    const mergedArray = Array.from(mergedSet);
+    return mergedArray;
 }
 
 const ex3 = mergeSet([1, 3, 2], [5, 2, 1, 4], [2, 1]);
@@ -55,10 +78,15 @@ document.getElementById('exercice3').value = ex3.toString();
 //
 // Exemple : isTrue([{name: "Pikachu", number: 25, caught: 3}, {name: "Togepi", number: 175, caught: 1}], "number") devrait retourner true.
 function isTrue(collection, pre) {
-    // TODO
-    return pre;
-}
 
+    for (let i = 0; i < collection.length; i++) {
+        if (!collection[i][pre]) {
+            return false;
+        }
+    }
+
+    return true;
+}
 const ex4 = isTrue([{name: 'Quincy', role: 'Founder', isBot: false}, {
     name: 'Naomi',
     role: '',
@@ -71,8 +99,22 @@ document.getElementById('exercice4').value = ex4.toString();
 //
 // La fonction de tri prend une collection en entrée, et doit retourner celle ordonnée par ordre alphabétique
 function order(collection) {
-    // TODO
-    return collection;
+
+    const sortedCollection = collection.sort(function(a, b) {
+        
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+
+        if (a < b)
+            return -1;
+        else if (a > b)
+            return 1;
+        else
+            return 0;
+        
+    });
+
+    return sortedCollection;
 }
 
 const ex5 = order(['Randonnée', 'VTT', 'Montagne', 'Via Ferrata']);
@@ -97,8 +139,28 @@ document.getElementById('exercice5').value = ex5.toString();
 // Le résultat doit bien être formaté comme suit => [Movie : Lord of the ring,Predestination],[Show : Sherlock,Black mirror]
 
 function groupBy(collection) {
-    // TODO
-    return collection;
+    const array = [];
+    const categories = {};
+
+    collection.forEach(item => {
+        if (categories[item.category])
+            categories[item.category].items.push(item);
+        else {
+            categories[item.category] = {
+                category: item.category,
+                items: [item],
+                toString: function() {
+                    return `${this.category}: ${this.items.map(item => item.title).join(',')}`;
+                }
+            };
+        }
+    });
+
+    for (const category in categories) {
+        array.push(categories[category]);
+    }
+
+    return array;
 }
 
 const ex6 = groupBy([
